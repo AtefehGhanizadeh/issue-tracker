@@ -16,6 +16,7 @@ import type {
 import { formatDate } from "../../../utils/formatDate";
 import CustomChip from "../CustomChip";
 import IssueActions from "../IssueActions";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   issues: Issue[];
@@ -77,6 +78,7 @@ const columns: readonly Column[] = [
 export default function IssuesTable({ issues }: Props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const navigate = useNavigate();
 
   const handleChangePage = (_event: unknown, newPage: number) => {
     setPage(newPage);
@@ -111,7 +113,13 @@ export default function IssuesTable({ issues }: Props) {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
+                    <TableRow
+                      onClick={() => navigate(`/issues/${row.id}`)}
+                      hover
+                      role="checkbox"
+                      tabIndex={-1}
+                      key={row.id}
+                    >
                       {columns.map((column) => {
                         const value =
                           column.id === "actions" ? undefined : row[column.id];
