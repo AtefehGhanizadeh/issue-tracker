@@ -1,10 +1,14 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Layout from "../../components/Layout";
+import Issues from "../../pages/Issues";
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<div>Home</div>} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<Issues />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
