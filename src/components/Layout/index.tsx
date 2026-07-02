@@ -1,18 +1,13 @@
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Sidebar from "./Sidebar";
-import DesktopHeader from "./DesktopLayout/DesktopHeader";
-import MobileHeader from "./MobileLayout/MobileHeader";
-import MobileNavbar from "./MobileLayout/MobileNavbar";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { Outlet } from "react-router-dom";
-import { useState } from "react";
-
+import MobileNavbar from "./MobileLayout/MobileNavbar";
+import Sidebar from "./Sidebar";
+import IssuesFiltersBar from "../issue/IssuesFiltersBar";
 
 export default function Layout() {
-  const [headerConfig, setHeaderConfig] = useState<HeaderConfig>({});
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
@@ -26,6 +21,7 @@ export default function Layout() {
       }}
     >
       {isMobile ? <MobileNavbar /> : <Sidebar />}
+      {isMobile && <IssuesFiltersBar />}
 
       <Box
         sx={{
@@ -34,12 +30,6 @@ export default function Layout() {
           flexDirection: "column",
         }}
       >
-        {isMobile ? (
-          <MobileHeader {...headerConfig} />
-        ) : (
-          <DesktopHeader {...headerConfig} />
-        )}
-
         <Box
           component="main"
           sx={{
@@ -48,12 +38,13 @@ export default function Layout() {
           }}
         >
           <Container
-            maxWidth="lg"
+            maxWidth={false}
             sx={{
               p: 3,
+              height: "100%",
             }}
           >
-            <Outlet context={{ setHeaderConfig }} />
+            <Outlet />
           </Container>
         </Box>
       </Box>

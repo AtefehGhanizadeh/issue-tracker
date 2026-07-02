@@ -16,3 +16,12 @@ export interface Issue {
   dueDate: string;
   createdAt: string;
 }
+
+export type UpdateIssueDto = {
+  title: string;
+  description: string;
+  status: "Open" | "In Progress" | "Done";
+  priority: "Low" | "Medium" | "High" | "Critical";
+  assignee: string;
+  dueDate: string;
+};

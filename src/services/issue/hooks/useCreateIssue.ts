@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createIssue } from "../issue.service";
-import type { Issue } from "../type";
+import type { UpdateIssueDto } from "../type";
 import { useNavigate } from "react-router-dom";
 
 const useCreateIssue = () => {
@@ -8,7 +8,7 @@ const useCreateIssue = () => {
   const navigate = useNavigate();
 
   return useMutation({
-    mutationFn: (issue: Issue) => createIssue(issue),
+    mutationFn: (issue: UpdateIssueDto) => createIssue(issue),
 
     onSuccess: () => {
       queryClient.invalidateQueries({

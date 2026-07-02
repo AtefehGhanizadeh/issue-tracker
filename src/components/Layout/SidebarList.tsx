@@ -7,7 +7,7 @@ const SidebarList = () => {
   const navigate = useNavigate();
 
   const menu = [
-    { label: "Issues", path: "/issues" },
+    { label: "Issues", path: "/" },
     { label: "New Issue", path: "/new-issue" },
   ];
 

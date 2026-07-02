@@ -1,29 +1,16 @@
 import apiClient from "../../app/api";
-import type { Issue } from "./type";
+import type { Issue, UpdateIssueDto } from "./type";
 import type { GetIssuesParams, IssuesResponse } from "./query";
 
 export async function getIssues(
   params: GetIssuesParams,
 ): Promise<IssuesResponse> {
-  const {
-    page,
-    pageSize,
-    search,
-    status,
-    priority,
-    assignee,
-    sortBy,
-    order,
-  } = params;
+  const { page, pageSize, status, priority, assignee } = params;
 
   const searchParams = new URLSearchParams();
 
   searchParams.set("_page", String(page));
   searchParams.set("_per_page", String(pageSize));
-
-  if (search) {
-    searchParams.set("q", search);
-  }
 
   if (status) {
     searchParams.set("status", status);
@@ -35,10 +22,6 @@ export async function getIssues(
 
   if (assignee) {
     searchParams.set("assignee", assignee);
-  }
-
-  if (sortBy) {
-    searchParams.set("_sort", order === "desc" ? `-${sortBy}` : sortBy);
   }
 
   const response = await apiClient.get<IssuesResponse>(
@@ -53,14 +36,14 @@ export async function getIssueById(id: number): Promise<Issue> {
   return response.data;
 }
 
-export async function createIssue(issue: Issue): Promise<Issue> {
+export async function createIssue(issue: UpdateIssueDto): Promise<Issue> {
   const response = await apiClient.post<Issue>("/issues", issue);
   return response.data;
 }
 
 export async function updateIssue(
   id: number,
-  issue: Issue,
+  issue: UpdateIssueDto,
 ): Promise<Issue> {
   const response = await apiClient.put<Issue>(`/issues/${id}`, issue);
 

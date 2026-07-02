@@ -15,7 +15,7 @@ const EditIssuePage = () => {
 
   const editIssue = (data: IssueFormType) => {
     mutate({
-      id: id!,
+      id: Number(id),
       issue: data,
     });
   };

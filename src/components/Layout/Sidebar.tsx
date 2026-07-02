@@ -14,6 +14,8 @@ export default function SideBar() {
         backgroundColor: theme.palette.sidebar.bg,
         color: theme.palette.sidebar.text,
         padding: 2,
+        borderRight:'1px solid',
+        borderColor: "divider",
       })}
     >
       <Typography

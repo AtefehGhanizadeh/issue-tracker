@@ -10,12 +10,14 @@ import CustomChip from "../CustomChip";
 import IssueActions from "../IssueActions";
 import IssueDetailsRows from "./IssueDetailsRows";
 import type { Issue } from "../../../services/issue/type";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   issue: Issue;
 };
 
 export default function IssueDetails({ issue }: Props) {
+  const navigate = useNavigate();
   return (
     <Container maxWidth="md">
       <Paper
@@ -85,7 +87,7 @@ export default function IssueDetails({ issue }: Props) {
               justifyContent: { xs: "center", sm: "flex-end" },
             }}
           >
-            <IssueActions />
+            <IssueActions onDeleteSuccess={() => navigate("/")} id={issue.id} />
           </Box>
         </Stack>
       </Paper>

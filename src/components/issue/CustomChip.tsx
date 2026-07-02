@@ -24,7 +24,7 @@ const mapColors = {
   }
 >;
 const CustomChip = ({ label }: Props) => {
-  console.log(label);
+
   return (
     <Chip
       label={label}

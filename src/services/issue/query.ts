@@ -3,12 +3,10 @@ import type { Issue, IssuePriority, IssueStatus } from "./type";
 export type GetIssuesParams = {
   page: number;
   pageSize: number;
-
   search?: string;
   status?: IssueStatus;
   priority?: IssuePriority;
   assignee?: string;
-
   sortBy?: "createdAt" | "dueDate";
   order?: "asc" | "desc";
 };

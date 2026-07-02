@@ -1,11 +1,17 @@
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { useNavigate } from "react-router-dom";
+import DeleteIssueDialog from "./DeleteIssueDialog";
 
-export default function IssueActions({ id }: { id: number }) {
+type Props = {
+  id: number;
+  onDeleteSuccess?:()=>void ;
+};
+
+export default function IssueActions({ id, onDeleteSuccess }: Props) {
   const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -14,11 +20,11 @@ export default function IssueActions({ id }: { id: number }) {
       }}
     >
       <IconButton
+        size="small"
         onClick={(e) => {
           e.stopPropagation();
           navigate(`/issues/${id}/edit`);
         }}
-        size="small"
         sx={{
           border: "1px solid",
           borderColor: "divider",
@@ -27,16 +33,7 @@ export default function IssueActions({ id }: { id: number }) {
         <EditOutlinedIcon fontSize="small" />
       </IconButton>
 
-      <IconButton
-        size="small"
-        sx={{
-          color: "error.main",
-          border: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <DeleteOutlineOutlinedIcon fontSize="small" />
-      </IconButton>
+      <DeleteIssueDialog onSuccess={onDeleteSuccess} id={id} />
     </Box>
   );
 }
