@@ -1,13 +1,19 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "../../components/Layout";
-import Issues from "../../pages/Issues";
+import Home from "../../pages/Home";
+import IssueDetailsPage from "../../pages/IssueDetailsPage";
+import CreateIssuePage from "../../pages/CreateIssuePage";
+import EditIssuePage from "../../pages/EditIssuePage";
 
 function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/" element={<Issues />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/issues/:id" element={<IssueDetailsPage />} />
+          <Route path="/new-issue" element={<CreateIssuePage />} />
+          <Route path="/issues/:id/edit" element={<EditIssuePage />} />
         </Route>
       </Routes>
     </BrowserRouter>

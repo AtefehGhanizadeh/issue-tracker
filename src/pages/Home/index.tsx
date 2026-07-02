@@ -7,7 +7,7 @@ import IssueCardList from "../../components/issue/issueCard/IssueCardList";
 import useGetIssues from "../../services/issue/hooks/useGetIssues";
 import AppState from "../../components/AppState/AppState";
 
-const Issues = () => {
+export default function Home() {
   const { setHeaderConfig } = useHeader();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -37,6 +37,4 @@ const Issues = () => {
       </div>
     );
   }
-};
-
-export default Issues;
+}

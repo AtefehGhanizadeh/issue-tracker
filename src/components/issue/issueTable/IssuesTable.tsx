@@ -71,7 +71,7 @@ const columns: readonly Column[] = [
     id: "actions",
     label: "Actions",
     minWidth: 170,
-    render: (value) => <IssueActions />,
+    render: (_, row) => <IssueActions id={row.id} />,
   },
 ];
 
