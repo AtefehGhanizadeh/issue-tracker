@@ -20,6 +20,12 @@ import { useNavigate } from "react-router-dom";
 
 type Props = {
   issues: Issue[];
+  count: number;
+  page: number;
+  pageSize: number;
+
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 };
 
 type Column = {
@@ -41,60 +47,49 @@ const columns: readonly Column[] = [
   {
     id: "status",
     label: "Status",
-    minWidth: 100,
     render: (value) => <CustomChip label={value as IssueStatus} />,
   },
   {
     id: "priority",
     label: "Priority",
-    minWidth: 170,
     render: (value) => <CustomChip label={value as IssuePriority} />,
   },
   {
     id: "assignee",
-    label: "Asignee",
-    minWidth: 170,
+    label: "Assignee",
   },
   {
     id: "createdAt",
     label: "Created At",
-    minWidth: 170,
     render: (value) => formatDate(value as string),
   },
   {
     id: "dueDate",
     label: "Due Date",
-    minWidth: 170,
   },
-
   {
     id: "actions",
     label: "Actions",
-    minWidth: 170,
     render: (_, row) => <IssueActions id={row.id} />,
   },
 ];
 
-export default function IssuesTable({ issues }: Props) {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+export default function IssuesTable({
+  issues,
+  count,
+  page,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
+}: Props) {
   const navigate = useNavigate();
 
-  const handleChangePage = (_event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+  const issuesList = Array.isArray(issues) ? issues : [];
 
   return (
     <Paper sx={{ width: "100%", overflow: "hidden" }}>
       <TableContainer sx={{ maxHeight: 440 }}>
-        <Table stickyHeader aria-label="sticky table">
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               {columns.map((column) => (
@@ -107,46 +102,43 @@ export default function IssuesTable({ issues }: Props) {
               ))}
             </TableRow>
           </TableHead>
-          {issues && (
-            <TableBody>
-              {issues
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow
-                      onClick={() => navigate(`/issues/${row.id}`)}
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.id}
-                    >
-                      {columns.map((column) => {
-                        const value =
-                          column.id === "actions" ? undefined : row[column.id];
 
-                        return (
-                          <TableCell key={column.id}>
-                            {column.render
-                              ? column.render(value as Issue[keyof Issue], row)
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
+          <TableBody>
+            {issuesList.map((row) => (
+              <TableRow
+                key={row.id}
+                hover
+                onClick={() => navigate(`/issues/${row.id}`)}
+              >
+                {columns.map((column) => {
+                  const value =
+                    column.id === "actions" ? undefined : row[column.id];
+
+                  return (
+                    <TableCell key={column.id}>
+                      {column.render
+                        ? column.render(value as Issue[keyof Issue], row)
+                        : value}
+                    </TableCell>
                   );
                 })}
-            </TableBody>
-          )}
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       </TableContainer>
+
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={10}
-        rowsPerPage={rowsPerPage}
+        count={count}
+        rowsPerPage={pageSize}
         page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        onPageChange={(_, newPage) => onPageChange(newPage)}
+        onRowsPerPageChange={(e) => {
+          onPageSizeChange(parseInt(e.target.value, 10));
+          onPageChange(0);
+        }}
       />
     </Paper>
   );

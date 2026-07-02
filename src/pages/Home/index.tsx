@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHeader } from "../../components/Layout/hooks/useHeader";
 import IssuesTable from "../../components/issue/issueTable/IssuesTable";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -11,7 +11,18 @@ export default function Home() {
   const { setHeaderConfig } = useHeader();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { data, isPending, isError, error } = useGetIssues();
+
+  // pagination state
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+
+  const { data, isPending, isError, error } = useGetIssues({
+    page: page + 1,
+    pageSize,
+  });
+
+  console.log("API data =>", data);
+  console.log("data.data =>", data?.data);
 
   useEffect(() => {
     setHeaderConfig({
@@ -20,21 +31,26 @@ export default function Home() {
     });
   }, []);
 
-  const isEmpty = data && !data.length ? true : false;
+  const isEmpty = data && data.data.length === 0;
 
   if (isPending || isError || isEmpty) {
     return <AppState isLoading={isPending} error={error} empty={isEmpty} />;
   }
 
-  if (data && data.length) {
-    return (
-      <div>
-        {isMobile ? (
-          <IssueCardList issues={data} />
-        ) : (
-          <IssuesTable issues={data} />
-        )}
-      </div>
-    );
-  }
+  return (
+    <div>
+      {isMobile ? (
+        <IssueCardList issues={data.data} />
+      ) : (
+        <IssuesTable
+          issues={data.data ?? []}
+          count={data.items}
+          page={page}
+          pageSize={pageSize}
+          onPageChange={setPage}
+          onPageSizeChange={setPageSize}
+        />
+      )}
+    </div>
+  );
 }

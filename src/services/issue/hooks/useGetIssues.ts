@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { getIssues } from "../issue.service";
-import type { Issue } from "../type";
+import type { GetIssuesParams } from "../query";
 
-const useGetIssues = () => {
-  return useQuery<Issue[]>({
-    queryKey: ["issues"],
-    queryFn: getIssues,
+const useGetIssues = (params: GetIssuesParams) => {
+  return useQuery({
+    queryKey: ["issues", params],
+    queryFn: () => getIssues(params),
+    placeholderData: (previousData) => previousData,
   });
 };
 
